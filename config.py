@@ -1,24 +1,35 @@
 import os
 from dotenv import load_dotenv
 
+# Load .env file if it exists (for local development)
 load_dotenv()
 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-ALLOWED_USER_IDS = [int(uid.strip()) for uid in os.getenv("ALLOWED_USER_IDS", "").split(",") if uid.strip()]
+ALLOWED_USER_IDS = [
+    int(uid.strip())
+    for uid in os.getenv("ALLOWED_USER_IDS", "").split(",")
+    if uid.strip()
+]
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
-GITHUB_REPO = os.getenv("GITHUB_REPO")          # e.g. NimaAfkham/Kyuka_Menu_UI
+GITHUB_REPO = os.getenv("GITHUB_REPO")
 GITHUB_BRANCH = os.getenv("GITHUB_BRANCH", "master")
 GITHUB_MENU_PATH = os.getenv("GITHUB_MENU_PATH", "menu.json")
 
-# Safety checks
+# Soft checks (only raise if really missing)
+missing = []
 if not TELEGRAM_BOT_TOKEN:
-    raise ValueError("TELEGRAM_BOT_TOKEN is missing in .env")
+    missing.append("TELEGRAM_BOT_TOKEN")
 if not ALLOWED_USER_IDS:
-    raise ValueError("ALLOWED_USER_IDS is missing in .env")
+    missing.append("ALLOWED_USER_IDS")
 if not DATABASE_URL:
-    raise ValueError("DATABASE_URL is missing in .env")
+    missing.append("DATABASE_URL")
 if not GITHUB_TOKEN:
-    raise ValueError("GITHUB_TOKEN is missing in .env")
+    missing.append("GITHUB_TOKEN")
+if not GITHUB_REPO:
+    missing.append("GITHUB_REPO")
+
+if missing:
+    raise ValueError(f"Missing required environment variables: {', '.join(missing)}")
