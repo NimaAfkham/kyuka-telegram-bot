@@ -86,12 +86,9 @@ async def back_main(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
 
-    from handlers.start import start
-    # Re-use start message
     keyboard = [
         [InlineKeyboardButton("📋 List Categories", callback_data="list_categories")],
         [InlineKeyboardButton("🔄 Regenerate & Publish Menu", callback_data="publish_menu")],
-        [InlineKeyboardButton("⚙️ Settings", callback_data="settings")],
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 

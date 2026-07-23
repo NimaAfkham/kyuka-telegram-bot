@@ -11,7 +11,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("📋 List Categories", callback_data="list_categories")],
         [InlineKeyboardButton("🔄 Regenerate & Publish Menu", callback_data="publish_menu")],
-        [InlineKeyboardButton("⚙️ Settings", callback_data="settings")],
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
 
