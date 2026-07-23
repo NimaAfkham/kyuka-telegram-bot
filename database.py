@@ -62,3 +62,27 @@ async def get_settings():
     async with pool.acquire() as conn:
         rows = await conn.fetch("SELECT key, value FROM settings")
         return {r["key"]: r["value"] for r in rows}
+    
+async def get_item_by_id(item_id: str):
+    async with pool.acquire() as conn:
+        row = await conn.fetchrow("""
+            SELECT id, category_id, name, slug, description, price, 
+                   is_available, is_featured, display_order
+            FROM menu_items
+            WHERE id = $1
+        """, item_id)
+        return dict(row) if row else None
+
+
+async def update_item_price(item_id: str, new_price: float) -> bool:
+    try:
+        async with pool.acquire() as conn:
+            result = await conn.execute("""
+                UPDATE menu_items
+                SET price = $1, updated_at = NOW()
+                WHERE id = $2
+            """, new_price, item_id)
+            return result == "UPDATE 1"
+    except Exception as e:
+        print(f"Error updating price: {e}")
+        return False
